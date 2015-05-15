@@ -1215,6 +1215,19 @@ u32 _start(u32 calledByGame)
 		else // for held status
 			*RESET_STATUS = 0;
 	}
+	
+	/* Scale controller stick input exponentially */
+	/* Converts linear into less 'twitchy' exponential curve. */
+	for(chan = 0; chan < MaxPads; ++chan) { 
+	    s8 raw;
+		raw = Pad[chan].stickX;
+		Pad[chan].stickX = (raw>0)?raw*raw/128:-raw*raw/128; //Squared
+		//Pad[chan].stickX = raw*raw*raw/128/128; //Cubic
+		raw = Pad[chan].stickY;
+		Pad[chan].stickY = (raw>0)?raw*raw/128:-raw*raw/128; //Squared
+		//Pad[chan].stickY = raw*raw*raw/128/128; //Cubic
+	}	
+	
 	memInvalidate = (u32)SIInited;
 	asm volatile("dcbi 0,%0; sync" : : "b"(memInvalidate) : "memory");
 

@@ -1,0 +1,8 @@
+# Ignore all the output artefacts
+*.o
+*.bin
+*.elf
+*.d
+*.map
+kernel/asm/*.h
+loader/build
